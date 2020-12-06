@@ -28,6 +28,10 @@ Unfortunately, threads that are not loaded will not appear in the drop-down list
 
 Other improvements are also welcome.
 
+## Notes
+This extension is made possible by analyzing Google Chat, so if Google Chat changes, it may stop working.
+I'll think about it then when it happens...
+
 ## 概要
 GoogleChatThreadSwitcherはGoogle Chrome拡張機能です。
 Google Chromeにインストールすると、Google Chatでスレッドを選んで移動することができるようになります。Google Chatのスタンドアロンアプリでも機能を使うことができます。
@@ -45,12 +49,16 @@ Google Chromeにインストールすると、Google Chatでスレッドを選�
 6. GoogleChatThreadSwitcherのフォルダを選択します。
 
 ## 使用方法
-インストール後あらためてChatを開くと、右上にセレクトボックスが現れ、スレッドを選ぶと、そのスレッドの入力欄にスクロールします。
+インストール後あらためてChatを開くと、右上にドロップダウンリストが現れ、スレッドを選ぶと、そのスレッドの入力欄にスクロールします。
 
 未読のあるスレッドのタイトルは太字で表示されます。
 
 スレッドタイトルは、各スレッドの最初の書き込みの最初の行から自動的に作っていますので、新しいスレッドを作るときは、1行目を【タイトル】だけにするのがおススメです。（詳しいルールを知りたければソースを見てください）。
 
-残念なことに、ロードされていないスレッドはセレクトボックスには表示されません。チャットルームをスクロールして新たなスレッドがロードされたらセレクトボックスに反映されます。これは致し方のない仕様ですが、もしこのイシューを解決できたならぜひGitHubのリポジトリにコントリビュートしてください。
+残念なことに、ロードされていないスレッドはドロップダウンリストには表示されません。チャットルームをスクロールして新たなスレッドがロードされたらドロップダウンリストに反映されます。これは致し方のない仕様ですが、もしこのイシューを解決できたならぜひGitHubのリポジトリにコントリビュートしてください。
 
 その他の改良も大歓迎です。
+
+## ご注意
+この拡張機能はGoogle Chatを解析して実現しているため、Google Chatが変わったら動かなくなる可能性があります。
+その時はその時ということで…
