@@ -1,17 +1,39 @@
 /* helper methods for checking if current page is a DM or a Room */
-const isDM = () => document.location.href.split('/').slice(-2)[0] === 'dm';
-const isRoom = () => document.location.href.split('/').slice(-2)[0] === 'room';
+const isDM = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'dm';
+const isRoom = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'room';
+let lastLocationHref;
+let threadHeadersArray;
+
+const switchThread = function()
+{
+  const select = document.getElementById('thread-group-selector');
+  if (select) {
+    const textbox = threadHeadersArray[select.selectedIndex].parentNode.querySelector('[role="textbox"]');
+    if (textbox) {
+      textbox.scrollIntoView(false);
+    }
+  }
+}
 
 /* transform text from a thread summary */
 const formatTitleFromThreadHeading = (title) => {
   return title
-    .replace(/Thread by [^\.]*\./, '') /* remove thread creator */
-    .replace(/\d+ (Replies|Reply)\./, '') /* remove number of replies */
-    .replace(/\.[^\.]*\d+\:\d+ (A|P)M/, '') /* remove string with thread start date */
-    .replace(/Last updated.*$/, '') /* remove everything after "Last updated */
+  //.replace(/Thread by [^\.]*\./, '') /* remove thread creator */
+    .replace(/\. \d+ (Replies|Reply)\./, '') /* remove number of replies */
+    .replace(/\. \d+ 件の返信/, '')
+  //.replace(/\.[^\.]*\d+\:\d+ (A|P)M/, '') /* remove string with thread start date */
+    .replace(/\. \d+月\d+日, \d+\:\d+/, '')
+    .replace(/. Last updated.*$/, '') /* remove everything after "Last updated */
+    .replace(/\. 最終更新.*$/, '')
     .replace(/\. Now$/, '') /* remove 'Now' that's added for brand new threads */
+    .replace(/\. たった今$/, '')
     .replace(/\. \d+ mins?$/, '') /* remove minute counter for brand new threads */
-    .replace(/\d+ Unread\./, ''); /* remove unread counter */
+    .replace(/\. \d+ 分前/, '') /* remove minute counter for brand new threads */
+  //.replace(/\d+ Unread\./, ''); /* remove unread counter */
+    .replace(/\n.*/gm, '') /* remove the second line and beyond */
+    .replace(/。.*/gm, '') /* remove 2nd sentence and beyond */
+    .replace(/\*([^(\*)]+)\*/g, '$1'); /* remove bold markdown */
+    //.replace(/【([^(【】)]+)】/g, '$1'); /* remove 【】 */
 };
 
 /* helper methods for group configs */
@@ -53,35 +75,32 @@ const groupThreads = (threadSelectors, configs) => {
 /* build the sidebar and add thread selectors to it */
 const buildSidebar = () => {
   /* query for threads in this room */
-  const containsThreadContent = element => element.textContent.match(/^Thread by/);
-  const roomId = document.location.href.split('/').slice(-1)[0];
-  const currentRoom = document.querySelectorAll(`[data-stream-group-id="space/${roomId}"]`)[0];
-  const headers = currentRoom.querySelectorAll('[role="heading"]');
-  const threads = Array.from(headers).filter(containsThreadContent);
+  const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
+  let currentRoom;
+  let threadHeaders;
+  currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
+  if (currentRoom === undefined || currentRoom === null) {
+    return null;
+  }
+  threadHeaders = currentRoom.querySelectorAll('[role="heading"][aria-label]');
+  if (threadHeaders === undefined || threadHeaders === null) {
+    return null;
+  }
+  threadHeadersArray = Array.from(threadHeaders);
 
   /* build selectors (buttons) that will unhide the thread */
-  const threadSelectors = threads
-    .reverse() /* reverse the order of the threads so that the newest appear at the top */
+  const threadSelectors = threadHeadersArray
     .map((thread) => {
-      const newSelector = document.createElement('button');
+      const newSelector = document.createElement('option');
       newSelector.className = 'thread-selector';
       newSelector.threadHeading = thread.textContent;
-      if (thread.textContent.match(/\d+ Unread\./)) {
+      const titleArr = thread.textContent.split('.');
+      if (titleArr[0].indexOf('Unread') >= 0 || titleArr[0].indexOf('未読') >= 0) {
         newSelector.className = newSelector.className + ' thread-unread';
+        titleArr.shift();
       }
-      newSelector.innerText = formatTitleFromThreadHeading(thread.textContent);
-      newSelector.onclick = (event) => {
-        /* hide all previous threads */
-        threads
-          .map(thread => thread.parentElement)
-          .forEach(controller => controller.style.display = '');
-
-        /* make selected thread visible */
-        thread.parentElement.style.display = 'inherit';
-
-        /* make thread selector active */
-        event.target.className = event.target.className + ' thread-active';
-      };
+      titleArr.shift();
+      newSelector.innerText = formatTitleFromThreadHeading(titleArr.join('.'));
       return newSelector;
     });
 
@@ -98,15 +117,17 @@ const buildSidebar = () => {
     .filter(group => !group.shouldHide) /* don't add any threads that should be hidden */
     .map((group, groupIndex, unfilteredGroups) => {
       /* build groups */
-      const groupDOM = document.createElement('div');
-      groupDOM.id = `thread-group-${group.label}`;
+      const groupDOM = document.createElement('select');
+      //groupDOM.id = `thread-group-${group.label}`;
+      groupDOM.id = 'thread-group-selector';
       groupDOM.className = 'thread-group-container';
+      groupDOM.onchange = switchThread;
 
       /* don't add group label if there's only one group */
       if (unfilteredGroups.length > 1) {
         /* create and append group heading */
-        const groupHeading = document.createElement('h3');
-        groupHeading.className = 'thread-group-heading';
+        const groupHeading = document.createElement('option');
+        //groupHeading.className = 'thread-group-heading';
         groupHeading.innerText = group.label;
         groupDOM.appendChild(groupHeading);
       }
@@ -132,10 +153,12 @@ const insertSidebar = () => {
   if (!isRoom()) { return; }
 
   const sidebar = buildSidebar();
+  if (sidebar === null) {
+    return;
+  }
 
-  const roomId = document.location.href.split('/').slice(-1)[0];
-  const currentRoom = document.querySelectorAll(`[data-stream-group-id="space/${roomId}"]`)[0];
-
+  const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
+  const currentRoom = document.querySelectorAll(`[data-group-id="space/${roomId}"]`)[0];
   const roomFirstChild = currentRoom.firstChild;
   if (roomFirstChild.className !== 'thread-sidebar') {
     /* sidebar doesn't exist yet! add it */
@@ -152,13 +175,13 @@ const injectCSS = () => {
   const cssOverride = document.createElement('style');
   cssOverride.innerHTML = `
     /* hide "added" notifications */
-    .mCOR5e { display: none; }
+    //.mCOR5e { display: none; }
     /* hide threads, and not messages */
-    .cZICLc.ajCeRb:not(.XbbXmb) { display: none; }
+    //.cZICLc.ajCeRb:not(.XbbXmb) { display: none; }
     /* hide loading indicator */
-    .qbEbKd { display: none!important; }
+    //.qbEbKd { display: none!important; }
     /* hide jump to bottom */
-    .NMA9Re { display: none }
+    //.NMA9Re { display: none }
     /* make rooms flex */
     .bzJiD.BEjUKc.eO2Zfd { display: flex; }
     /* expand room view */
@@ -180,16 +203,38 @@ const injectCSS = () => {
     }
     /* make selector bold when there are unreads */
     .thread-unread { font-weight: bold; }
+    .thread-group-container {
+      position: fixed;
+      top: 65px;
+      right: 0px;
+      width: 200px;
+    }
   `;
   document.body.appendChild(cssOverride);
 };
 
 /* trigger the whole process */
 const run = () => {
-  console.log('injecting thread sidebar and selectors');
-  injectCSS();
+  //const scrollContainer = document.querySelector('c-wiz[data-group-id][data-is-client-side] > div:nth-child(1)');
   insertSidebar();
-  setInterval(insertSidebar, 2000);
+  lastLocationHref = document.location.href;
 };
 
-run();
+const init = () => {
+  const observer = new MutationObserver(function() {
+    if (document.location.href == lastLocationHref) {
+      //return;
+    }
+    if (typeof runID === 'number') {
+      clearTimeout(runID);
+    }
+    runID = setTimeout(run, 200);
+  });
+  injectCSS();
+  run();
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
+window.onload = function() {
+  init();
+};

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "beta-chat-thread-picker",
-  "description": "Google Chat Extension to add a Thread Picker",
+  "name": "Google Chat Thread Switcher",
+  "description": "Google Chat Extension to add a Thread Switcher",
   "version": "1.0.0",
 
   "content_scripts": [
