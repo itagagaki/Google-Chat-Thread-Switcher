@@ -23,6 +23,7 @@ const formatTitleFromThreadHeading = (title) => {
     .replace(/\. \d+ 件の返信/, '')
   //.replace(/\.[^\.]*\d+\:\d+ (A|P)M/, '') /* remove string with thread start date */
     .replace(/\. \d+月\d+日, \d+\:\d+/, '')
+    .replace(/\. \d+\:\d+/, '')
     .replace(/. Last updated.*$/, '') /* remove everything after "Last updated */
     .replace(/\. 最終更新.*$/, '')
     .replace(/\. Now$/, '') /* remove 'Now' that's added for brand new threads */
