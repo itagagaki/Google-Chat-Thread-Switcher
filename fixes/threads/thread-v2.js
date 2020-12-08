@@ -9,10 +9,14 @@ const switchThread = function()
 {
   const select = document.getElementById('thread-selector');
   if (select) {
-    const textbox = threadHeadersArray[select.selectedIndex].parentNode.querySelector('[role="textbox"]');
-    if (textbox) {
-      textbox.scrollIntoView(false);
-      currentRoom.firstChild.scrollTop += 60;
+    const index = select.selectedIndex - 1;
+    if (index >= 0) {
+      const textbox = threadHeadersArray[index].parentNode.querySelector('[role="textbox"]');
+      if (textbox) {
+        textbox.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
+        currentRoom.firstChild.scrollTop += 60;
+      }
+      select.selectedIndex = 0;
     }
   }
 }
@@ -122,19 +126,18 @@ const buildSwitcher = () => {
       groupDOM.id = 'thread-selector';
       groupDOM.onchange = switchThread;
 
-      /* don't add group label if there's only one group */
-      if (unfilteredGroups.length > 1) {
-        /* create and append group heading */
-        const groupHeading = document.createElement('option');
-        //groupHeading.className = 'thread-group-heading';
-        groupHeading.innerText = group.label;
-        groupDOM.appendChild(groupHeading);
-      }
+      const head = document.createElement('option');
+      head.hidden = true;
+      head.disabled = true;
+      head.className = 'thread-selector-head';
+      head.innerText = 'スレッド移動';
+      groupDOM.appendChild(head);
 
       /* append all the threads in the group */
       group.threads
         .forEach(thread => groupDOM.appendChild(thread));
 
+      groupDOM.selectedIndex = 0;
       return groupDOM;
     });
 
@@ -156,14 +159,18 @@ const insertSwitcher = () => {
     return;
   }
 
-  const lastChild = currentRoom.lastChild;
-  if (lastChild.id !== 'thread-switcher') {
-    /* switcher doesn't exist yet! add it */
-    currentRoom.insertBefore(switcher, currentRoom.nextSibling);
+  const reference = document.querySelector('c-wiz');
+  if (reference === null) {
+    return;
   }
-  if (lastChild.textContent !== switcher.textContent) {
+  const target = reference.nextElementSibling;
+  if (target.id !== 'thread-switcher') {
+    /* switcher doesn't exist yet! add it */
+    reference.parentNode.insertBefore(switcher, reference.nextSibling);
+  }
+  if (target.textContent !== switcher.textContent) {
     /* we found new threads since the last run, update switcher */
-    currentRoom.replaceChild(switcher, lastChild);
+    reference.parentNode.replaceChild(switcher, target);
   }
 };
 
@@ -173,12 +180,14 @@ const injectCSS = () => {
   cssOverride.innerHTML = `
     #thread-switcher {}
     #thread-selector {
-      position: fixed;
+      position: absolute;
       top: 65px;
       right: 0px;
-      width: 200px;
+      width: 120px;
+      z-index: 2147483647;
     }
-    .thread-item { }
+    .thread-selector-head {}
+    .thread-item {}
     .thread-unread { font-weight: bold; }
   `;
   document.body.appendChild(cssOverride);
