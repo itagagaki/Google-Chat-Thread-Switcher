@@ -2,6 +2,7 @@
 const isDM = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'dm';
 const isRoom = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'room';
 let lastLocationHref;
+let currentRoom;
 let threadHeadersArray;
 
 const switchThread = function()
@@ -11,6 +12,7 @@ const switchThread = function()
     const textbox = threadHeadersArray[select.selectedIndex].parentNode.querySelector('[role="textbox"]');
     if (textbox) {
       textbox.scrollIntoView(false);
+      currentRoom.scrollTop += 60;
     }
   }
 }
@@ -76,7 +78,11 @@ const buildSwitcher = () => {
   /* query for threads in this room */
   const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
   let threadHeaders;
-  let currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
+  currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
+  if (currentRoom === undefined || currentRoom === null) {
+    return null;
+  }
+  currentRoom = currentRoom.firstChild;
   if (currentRoom === undefined || currentRoom === null) {
     return null;
   }
