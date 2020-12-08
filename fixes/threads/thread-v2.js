@@ -21,9 +21,7 @@ const formatTitleFromThreadHeading = (title) => {
   //.replace(/Thread by [^\.]*\./, '') /* remove thread creator */
     .replace(/\. \d+ (Replies|Reply)\./, '') /* remove number of replies */
     .replace(/\. \d+ 件の返信/, '')
-  //.replace(/\.[^\.]*\d+\:\d+ (A|P)M/, '') /* remove string with thread start date */
-    .replace(/\. \d+月\d+日, \d+\:\d+/, '')
-    .replace(/\. \d+\:\d+/, '')
+    .replace(/\. [^\.]*\d+\:\d+( (A|P)M)?/, '') /* remove string with thread start date */
     .replace(/. Last updated.*$/, '') /* remove everything after "Last updated */
     .replace(/\. 最終更新.*$/, '')
     .replace(/\. Now$/, '') /* remove 'Now' that's added for brand new threads */
