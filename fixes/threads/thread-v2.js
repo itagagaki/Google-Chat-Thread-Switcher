@@ -6,7 +6,7 @@ let threadHeadersArray;
 
 const switchThread = function()
 {
-  const select = document.getElementById('thread-group-selector');
+  const select = document.getElementById('thread-selector');
   if (select) {
     const textbox = threadHeadersArray[select.selectedIndex].parentNode.querySelector('[role="textbox"]');
     if (textbox) {
@@ -71,13 +71,12 @@ const groupThreads = (threadSelectors, configs) => {
     }, configsWithThreads);
 };
 
-/* build the sidebar and add thread selectors to it */
-const buildSidebar = () => {
+/* build the switcher */
+const buildSwitcher = () => {
   /* query for threads in this room */
   const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
-  let currentRoom;
   let threadHeaders;
-  currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
+  let currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
   if (currentRoom === undefined || currentRoom === null) {
     return null;
   }
@@ -91,7 +90,7 @@ const buildSidebar = () => {
   const threadSelectors = threadHeadersArray
     .map((thread) => {
       const newSelector = document.createElement('option');
-      newSelector.className = 'thread-selector';
+      newSelector.className = 'thread-item';
       newSelector.threadHeading = thread.textContent;
       const titleArr = thread.textContent.split('.');
       if (titleArr[0].indexOf('Unread') >= 0 || titleArr[0].indexOf('未読') >= 0) {
@@ -103,9 +102,9 @@ const buildSidebar = () => {
       return newSelector;
     });
 
-  /* create the sidebar DOM */
-  const sidebar = document.createElement('div');
-  sidebar.className = 'thread-sidebar';
+  /* create the switcher DOM */
+  const switcher = document.createElement('div');
+  switcher.id = 'thread-switcher';
 
   /* build groups based on checks in the group configs */
   const groupings = groupThreads(threadSelectors, groupingConfigs);
@@ -118,8 +117,7 @@ const buildSidebar = () => {
       /* build groups */
       const groupDOM = document.createElement('select');
       //groupDOM.id = `thread-group-${group.label}`;
-      groupDOM.id = 'thread-group-selector';
-      groupDOM.className = 'thread-group-container';
+      groupDOM.id = 'thread-selector';
       groupDOM.onchange = switchThread;
 
       /* don't add group label if there's only one group */
@@ -138,34 +136,34 @@ const buildSidebar = () => {
       return groupDOM;
     });
 
-  /* append each group container to the sidebar */
+  /* append each group container to the switcher */
   groupContainers
-    .forEach(groupContainer => sidebar.appendChild(groupContainer));
+    .forEach(groupContainer => switcher.appendChild(groupContainer));
 
-  return sidebar;
+  return switcher;
 };
 
-/* logic for injecting the sidebar into the page */
-/* (this gets called at an interval, and will replace an existing sidebar if there are updates) */
-const insertSidebar = () => {
-  /* if we are not in a room, don't build a sidebar */
+/* logic for injecting the switcher into the page */
+/* (this gets called at an interval, and will replace an existing switcher if there are updates) */
+const insertSwitcher = () => {
+  /* if we are not in a room, don't build a switcher */
   if (!isRoom()) { return; }
 
-  const sidebar = buildSidebar();
-  if (sidebar === null) {
+  const switcher = buildSwitcher();
+  if (switcher === null) {
     return;
   }
 
   const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
-  const currentRoom = document.querySelectorAll(`[data-group-id="space/${roomId}"]`)[0];
-  const roomFirstChild = currentRoom.firstChild;
-  if (roomFirstChild.className !== 'thread-sidebar') {
-    /* sidebar doesn't exist yet! add it */
-    currentRoom.insertBefore(sidebar, currentRoom.firstChild);
+  const target = document.querySelector(`div[data-soft-view-id="space/${roomId}"]`);
+  const lastChild = target.lastChild;
+  if (lastChild.id !== 'thread-switcher') {
+    /* switcher doesn't exist yet! add it */
+    target.insertBefore(switcher, target.nextSibling);
   }
-  if (roomFirstChild.textContent !== sidebar.textContent) {
-    /* we found new threads since the last run, update sidebar */
-    currentRoom.replaceChild(sidebar, currentRoom.firstChild);
+  if (lastChild.textContent !== switcher.textContent) {
+    /* we found new threads since the last run, update switcher */
+    target.replaceChild(switcher, target.lastChild);
   }
 };
 
@@ -173,41 +171,15 @@ const insertSidebar = () => {
 const injectCSS = () => {
   const cssOverride = document.createElement('style');
   cssOverride.innerHTML = `
-    /* hide "added" notifications */
-    //.mCOR5e { display: none; }
-    /* hide threads, and not messages */
-    //.cZICLc.ajCeRb:not(.XbbXmb) { display: none; }
-    /* hide loading indicator */
-    //.qbEbKd { display: none!important; }
-    /* hide jump to bottom */
-    //.NMA9Re { display: none }
-    /* make rooms flex */
-    .bzJiD.BEjUKc.eO2Zfd { display: flex; }
-    /* expand room view */
-    .Bl2pUd.krjOGe { width: 100%; }
-    /* set sidebar width */
-    .thread-sidebar { width: 20vw; overflow-y: scroll; }
-    .thread-selector {
-      background: none;
-      width: 100%;
-      padding: 0.5em;
-      border: none;
-      border-top: solid 1px;
-    }
-    .thread-selector:hover {
-      background: rgba(95,99,104,0.078);
-    }
-    .thread-active {
-      background: #e4f7fb;
-    }
-    /* make selector bold when there are unreads */
-    .thread-unread { font-weight: bold; }
-    .thread-group-container {
+    #thread-switcher {}
+    #thread-selector {
       position: fixed;
       top: 65px;
       right: 0px;
       width: 200px;
     }
+    .thread-item { }
+    .thread-unread { font-weight: bold; }
   `;
   document.body.appendChild(cssOverride);
 };
@@ -215,7 +187,7 @@ const injectCSS = () => {
 /* trigger the whole process */
 const run = () => {
   //const scrollContainer = document.querySelector('c-wiz[data-group-id][data-is-client-side] > div:nth-child(1)');
-  insertSidebar();
+  insertSwitcher();
   lastLocationHref = document.location.href;
 };
 
