@@ -12,7 +12,7 @@ const switchThread = function()
     const textbox = threadHeadersArray[select.selectedIndex].parentNode.querySelector('[role="textbox"]');
     if (textbox) {
       textbox.scrollIntoView(false);
-      currentRoom.scrollTop += 60;
+      currentRoom.firstChild.scrollTop += 60;
     }
   }
 }
@@ -79,10 +79,6 @@ const buildSwitcher = () => {
   const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
   let threadHeaders;
   currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
-  if (currentRoom === undefined || currentRoom === null) {
-    return null;
-  }
-  currentRoom = currentRoom.firstChild;
   if (currentRoom === undefined || currentRoom === null) {
     return null;
   }
@@ -160,16 +156,14 @@ const insertSwitcher = () => {
     return;
   }
 
-  const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
-  const target = document.querySelector(`div[data-soft-view-id="space/${roomId}"]`);
-  const lastChild = target.lastChild;
+  const lastChild = currentRoom.lastChild;
   if (lastChild.id !== 'thread-switcher') {
     /* switcher doesn't exist yet! add it */
-    target.insertBefore(switcher, target.nextSibling);
+    currentRoom.insertBefore(switcher, currentRoom.nextSibling);
   }
   if (lastChild.textContent !== switcher.textContent) {
     /* we found new threads since the last run, update switcher */
-    target.replaceChild(switcher, target.lastChild);
+    currentRoom.replaceChild(switcher, lastChild);
   }
 };
 
