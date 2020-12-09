@@ -81,16 +81,19 @@ const groupThreads = (threadSelectors, configs) => {
 const buildSwitcher = () => {
   /* query for threads in this room */
   const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
+  console.log('location:'+document.location.href+' => roomId:'+roomId);
   let threadHeaders;
   currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
   if (currentRoom === undefined || currentRoom === null) {
+    console.log('Room element not found.');
     return null;
   }
   threadHeaders = currentRoom.querySelectorAll('[role="heading"][aria-label]');
-  if (threadHeaders === undefined || threadHeaders === null) {
+  threadHeadersArray = Array.from(threadHeaders);
+  if (threadHeadersArray.length == 0) {
+    console.log('No threads.');
     return null;
   }
-  threadHeadersArray = Array.from(threadHeaders);
 
   /* build selectors (buttons) that will unhide the thread */
   const threadSelectors = threadHeadersArray
@@ -152,25 +155,33 @@ const buildSwitcher = () => {
 /* (this gets called at an interval, and will replace an existing switcher if there are updates) */
 const insertSwitcher = () => {
   /* if we are not in a room, don't build a switcher */
-  if (!isRoom()) { return; }
-
-  const switcher = buildSwitcher();
-  if (switcher === null) {
+  if (!isRoom())
+  {
+    console.log('Not in a room. location:'+document.location.href);
     return;
   }
 
   const reference = document.querySelector('c-wiz');
   if (reference === null) {
+    console.log('Could not find a point to inject switcher.');
     return;
   }
   const target = reference.nextElementSibling;
-  if (target.id !== 'thread-switcher') {
-    /* switcher doesn't exist yet! add it */
-    reference.parentNode.insertBefore(switcher, reference.nextSibling);
+  const switcher = buildSwitcher();
+  if (switcher) {
+    if (target.id !== 'thread-switcher') {
+      /* switcher doesn't exist yet! add it */
+      reference.parentNode.insertBefore(switcher, reference.nextSibling);
+    }
+    if (target.textContent !== switcher.textContent) {
+      /* we found new threads since the last run, update switcher */
+      reference.parentNode.replaceChild(switcher, target);
+    }
   }
-  if (target.textContent !== switcher.textContent) {
-    /* we found new threads since the last run, update switcher */
-    reference.parentNode.replaceChild(switcher, target);
+  else {
+    if (target.id === 'thread-switcher') {
+      reference.parentNode.removeChild(target);
+    }
   }
 };
 
