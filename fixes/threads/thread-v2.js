@@ -154,20 +154,22 @@ const buildSwitcher = () => {
 /* logic for injecting the switcher into the page */
 /* (this gets called at an interval, and will replace an existing switcher if there are updates) */
 const insertSwitcher = () => {
-  /* if we are not in a room, don't build a switcher */
-  if (!isRoom())
-  {
-    console.log('Not in a room. location:'+document.location.href);
-    return;
-  }
-
   const reference = document.querySelector('c-wiz');
   if (reference === null) {
     console.log('Could not find a point to inject switcher.');
     return;
   }
   const target = reference.nextElementSibling;
-  const switcher = buildSwitcher();
+
+  let switcher;
+  /* if we are not in a room, don't build a switcher */
+  if (!isRoom()) {
+    console.log('Not in a room. location:'+document.location.href);
+    switcher = null;
+  }
+  else {
+    switcher = buildSwitcher();
+  }
   if (switcher) {
     if (target.id !== 'thread-switcher') {
       /* switcher doesn't exist yet! add it */
