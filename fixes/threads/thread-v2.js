@@ -1,9 +1,26 @@
 /* helper methods for checking if current page is a DM or a Room */
 const isDM = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'dm';
 const isRoom = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'room';
+
 let lastLocationHref;
 let currentRoom;
 let threadHeadersArray;
+
+const scrollTo = function(element)
+{
+  let timerID;
+  const watchScroll = () => {
+    if (typeof timerID === 'number') {
+      clearTimeout(timerID);
+    }
+    timerID = setTimeout( () => {
+      window.removeEventListener('scroll', watchScroll, true);
+      currentRoom.firstChild.scrollTop += 40;
+    }, 100);
+  };
+  window.addEventListener('scroll', watchScroll, true);
+  element.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
+}
 
 const switchThread = function()
 {
@@ -11,26 +28,18 @@ const switchThread = function()
   if (select) {
     const index = select.selectedIndex - 1;
     if (index >= 0) {
-      const textbox = threadHeadersArray[index].parentNode.querySelector('[role="textbox"]');
-      if (textbox) {
-        let timerID;
-        const watchScroll = () => {
-          if (typeof timerID === 'number') {
-            clearTimeout(timerID);
-          }
-          timerID = setTimeout( () => {
-            window.removeEventListener('scroll', watchScroll, true);
-            currentRoom.firstChild.scrollTop += 60;
-          }, 100);
-        };
-        window.addEventListener('scroll', watchScroll, true);
-        textbox.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
+      const thread = threadHeadersArray[index].nextElementSibling;
+      if (thread) {
+        setTimeout( () => {scrollTo(thread)}, 0 );
       }
       else {
-        console.log('textbox not found.');
+        console.log('thread container element not found.');
       }
       select.selectedIndex = 0;
     }
+  }
+  else {
+    console.log('#thread-selector not found.');
   }
 }
 
