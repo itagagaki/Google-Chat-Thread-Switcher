@@ -1,36 +1,33 @@
+( () => {
+
 /* helper methods for checking if current page is a DM or a Room */
 const isDM = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'dm';
 const isRoom = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'room';
 
+/* variables */
 let lastLocationHref;
 let currentRoom;
 let threadHeadersArray;
 
-const scrollTo = function(element)
-{
-  let timerID;
-  const watchScroll = () => {
-    if (typeof timerID === 'number') {
-      clearTimeout(timerID);
-    }
-    timerID = setTimeout( () => {
-      window.removeEventListener('scroll', watchScroll, true);
-      currentRoom.firstChild.scrollTop += 40;
-    }, 100);
-  };
-  window.addEventListener('scroll', watchScroll, true);
-  element.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
-}
-
-const switchThread = function()
-{
+const switchThread = () => {
   const select = document.getElementById('thread-selector');
   if (select) {
     const index = select.selectedIndex - 1;
     if (index >= 0) {
-      const thread = threadHeadersArray[index].nextElementSibling;
-      if (thread) {
-        setTimeout( () => {scrollTo(thread)}, 0 );
+      const threadContainer = threadHeadersArray[index].nextElementSibling;
+      if (threadContainer) {
+        let timerID;
+        const watchScroll = () => {
+          if (typeof timerID === 'number') {
+            clearTimeout(timerID);
+          }
+          timerID = setTimeout( () => {
+            window.removeEventListener('scroll', watchScroll, true);
+            currentRoom.firstChild.scrollTop += 40;
+          }, 100);
+        };
+        window.addEventListener('scroll', watchScroll, true);
+        threadContainer.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
       }
       else {
         console.log('thread container element not found.');
@@ -44,7 +41,7 @@ const switchThread = function()
 }
 
 /* transform text from a thread summary */
-const formatTitleFromThreadHeading = (title) => {
+const formatTitleFromThreadHeading = title => {
   return title
   //.replace(/Thread by [^\.]*\./, '') /* remove thread creator */
     .replace(/\. \d+ (Replies|Reply)\./, '') /* remove number of replies */
@@ -237,7 +234,7 @@ const run = () => {
 
 const init = () => {
   let runID;
-  const observer = new MutationObserver(function() {
+  const observer = new MutationObserver( () => {
     if (document.location.href == lastLocationHref) {
       //return;
     }
@@ -251,6 +248,8 @@ const init = () => {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-window.onload = function() {
+window.onload = () => {
   init();
 };
+
+})();
