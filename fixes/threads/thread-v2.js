@@ -9,6 +9,7 @@ let lastLocationHref;
 let currentRoom;
 let threadHeadersArray;
 
+/* go to the thread selected with the thread selector */
 const switchThread = () => {
   const select = document.getElementById('thread-selector');
   if (select) {
@@ -117,7 +118,7 @@ const buildSwitcher = () => {
   const threadSelectors = threadHeadersArray
     .map((thread) => {
       const newSelector = document.createElement('option');
-      newSelector.className = 'thread-item';
+      newSelector.className = 'thread-list-item';
       newSelector.threadHeading = thread.textContent;
       const titleArr = thread.textContent.split('.');
       if (titleArr[0].indexOf('Unread') >= 0 || titleArr[0].indexOf('未読') >= 0) {
@@ -150,7 +151,7 @@ const buildSwitcher = () => {
       const head = document.createElement('option');
       head.hidden = true;
       head.disabled = true;
-      head.className = 'thread-selector-head';
+      head.className = 'thread-list-header';
       head.innerText = 'スレッド移動';
       groupDOM.appendChild(head);
 
@@ -169,8 +170,7 @@ const buildSwitcher = () => {
   return switcher;
 };
 
-/* logic for injecting the switcher into the page */
-/* (this gets called at an interval, and will replace an existing switcher if there are updates) */
+/* logic for building the switcher and injecting it into the page */
 const insertSwitcher = () => {
   const reference = document.querySelector('c-wiz');
   if (reference === null) {
@@ -212,21 +212,26 @@ const injectCSS = () => {
       width: 120px;
       z-index: 2147483647;
     }
-    .thread-selector-head {}
-    .thread-item {}
+    .thread-list-header {}
+    .thread-list-item {}
     .thread-unread { font-weight: bold; }
   `;
   document.body.appendChild(cssOverride);
 };
 
-/* trigger the whole process */
+/* process to be executed when changes occur in the document */
 const run = () => {
-  //const scrollContainer = document.querySelector('c-wiz[data-group-id][data-is-client-side] > div:nth-child(1)');
   insertSwitcher();
   lastLocationHref = document.location.href;
 };
 
-const init = () => {
+/* setup */
+const setup = () => {
+  /* initial run */
+  injectCSS();
+  run();
+
+  /* call run when the document changes and then settles down */
   let runID;
   const observer = new MutationObserver( () => {
     if (document.location.href == lastLocationHref) {
@@ -237,11 +242,10 @@ const init = () => {
     }
     runID = setTimeout(run, 200);
   });
-  injectCSS();
-  run();
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-window.onload = () => init();
+/* wait for the end of the document loading process before running setup */
+window.onload = () => setup();
 
 })();
