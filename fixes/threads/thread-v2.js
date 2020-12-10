@@ -13,8 +13,18 @@ const switchThread = function()
     if (index >= 0) {
       const textbox = threadHeadersArray[index].parentNode.querySelector('[role="textbox"]');
       if (textbox) {
+        let timerID;
+        const watchScroll = () => {
+          if (typeof timerID === 'number') {
+            clearTimeout(timerID);
+          }
+          timerID = setTimeout( () => {
+            window.removeEventListener('scroll', watchScroll, true);
+            currentRoom.firstChild.scrollTop += 60;
+          }, 100);
+        };
+        window.addEventListener('scroll', watchScroll, true);
         textbox.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
-        currentRoom.firstChild.scrollTop += 60;
       }
       select.selectedIndex = 0;
     }
@@ -214,6 +224,7 @@ const run = () => {
 };
 
 const init = () => {
+  let runID;
   const observer = new MutationObserver(function() {
     if (document.location.href == lastLocationHref) {
       //return;
