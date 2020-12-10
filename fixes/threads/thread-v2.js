@@ -26,6 +26,9 @@ const switchThread = function()
         window.addEventListener('scroll', watchScroll, true);
         textbox.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
       }
+      else {
+        console.log('textbox not found.');
+      }
       select.selectedIndex = 0;
     }
   }
