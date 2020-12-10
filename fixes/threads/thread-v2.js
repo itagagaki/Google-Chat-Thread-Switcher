@@ -101,13 +101,12 @@ const buildSwitcher = () => {
   /* query for threads in this room */
   const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
   console.log('location:'+document.location.href+' => roomId:'+roomId);
-  let threadHeaders;
   currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
   if (currentRoom === undefined || currentRoom === null) {
     console.log('Room element not found.');
     return null;
   }
-  threadHeaders = currentRoom.querySelectorAll('[role="heading"][aria-label]');
+  const threadHeaders = currentRoom.querySelectorAll('[role="heading"][aria-label]');
   threadHeadersArray = Array.from(threadHeaders);
   if (threadHeadersArray.length == 0) {
     console.log('No threads.');
@@ -180,15 +179,10 @@ const insertSwitcher = () => {
   }
   const target = reference.nextElementSibling;
 
-  let switcher;
   /* if we are not in a room, don't build a switcher */
-  if (!isRoom()) {
-    console.log('Not in a room. location:'+document.location.href);
-    switcher = null;
-  }
-  else {
-    switcher = buildSwitcher();
-  }
+  const switcher = isRoom()
+        ? buildSwitcher()
+        : ((console.log('Not in a room. location:'+document.location.href)), null);
   if (switcher) {
     if (target.id !== 'thread-switcher') {
       /* switcher doesn't exist yet! add it */
@@ -248,8 +242,6 @@ const init = () => {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-window.onload = () => {
-  init();
-};
+window.onload = () => init();
 
 })();
