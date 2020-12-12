@@ -1,8 +1,8 @@
 ( () => {
 
 /* helper methods for checking if current page is a DM or a Room */
-const isDM = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'dm';
-const isRoom = () => document.location.href.replace(/^https:\/\/chat\.google\.com\/([^\/\?]+).*$/, '$1') === 'room';
+const isDM = () => new URL(document.location.href).pathname.indexOf('/dm/') > -1;
+const isRoom = () => new URL(document.location.href).pathname.indexOf('/room/') > -1;
 
 /* variables */
 let lastLocationHref;
@@ -100,7 +100,7 @@ const groupThreads = (threadSelectors, configs) => {
 /* build the switcher */
 const buildSwitcher = () => {
   /* query for threads in this room */
-  const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com\/room\/([^\/\?]+).*$/, '$1');
+  const roomId = document.location.href.replace(/^https:\/\/chat\.google\.com.*\/room\/([^\/\?]+).*$/, '$1');
   console.log('location:'+document.location.href+' => roomId:'+roomId);
   currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
   if (currentRoom === undefined || currentRoom === null) {
