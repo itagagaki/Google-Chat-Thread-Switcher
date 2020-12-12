@@ -172,27 +172,21 @@ const run = () => {
   lastLocationHref = document.location.href;
 };
 
-/* setup */
-const setup = () => {
-  /* initial run */
-  injectCSS();
-  run();
+/* initial run */
+injectCSS();
+run();
 
-  /* call run when the document changes and then settles down */
-  let runID;
-  const observer = new MutationObserver( () => {
-    if (document.location.href == lastLocationHref) {
-      //return;
-    }
-    if (typeof runID === 'number') {
-      clearTimeout(runID);
-    }
-    runID = setTimeout(run, 200);
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
-}
-
-/* wait for the end of the document loading process before running setup */
-window.onload = () => setup();
+/* call run when the document changes and then settles down */
+let runID;
+const observer = new MutationObserver( () => {
+  if (document.location.href == lastLocationHref) {
+    //return;
+  }
+  if (typeof runID === 'number') {
+    clearTimeout(runID);
+  }
+  runID = setTimeout(run, 200);
+});
+observer.observe(document.body, { childList: true, subtree: true });
 
 })();
