@@ -84,7 +84,7 @@ const buildSwitcher = () => {
       const item = document.createElement('option');
       item.className = 'thread-list-item';
       const titleArr = thread.textContent.split('.');
-      if (titleArr[0].indexOf('Unread') >= 0 || titleArr[0].indexOf('未読') >= 0) {
+      if (titleArr[0].indexOf('Unread') > -1 || titleArr[0].indexOf('未読') > -1) {
         item.className = item.className + ' thread-unread';
         titleArr.shift();
       }
