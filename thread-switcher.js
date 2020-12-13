@@ -120,7 +120,7 @@ const buildSwitcher = () => {
 /* logic for building the switcher and injecting it into the page */
 const insertSwitcher = () => {
   const reference = document.querySelector('c-wiz');
-  if (reference === null) {
+  if (!reference) {
     console.log('Could not find a point to inject switcher.');
     return;
   }
