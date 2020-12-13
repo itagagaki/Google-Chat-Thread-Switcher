@@ -90,7 +90,7 @@ const buildSwitcher = () => {
         titleArr.shift();
       }
       titleArr.shift();
-      item.innerText = formatTitleFromThreadHeading(titleArr.join('.'));
+      item.textContent = formatTitleFromThreadHeading(titleArr.join('.'));
       return item;
     });
 
@@ -104,7 +104,7 @@ const buildSwitcher = () => {
   head.hidden = true;
   head.disabled = true;
   head.className = 'thread-list-header';
-  head.innerText = 'スレッド移動';
+  head.textContent = 'スレッド移動';
   selectDOM.appendChild(head);
   threadList.forEach(option => selectDOM.appendChild(option));
 
@@ -119,30 +119,25 @@ const buildSwitcher = () => {
 
 /* logic for building the switcher and injecting it into the page */
 const insertSwitcher = () => {
-  const reference = document.querySelector('c-wiz');
-  if (!reference) {
-    console.log('Could not find a point to inject switcher.');
-    return;
-  }
-  const target = reference.nextElementSibling;
-
   /* if we are not in a room, don't build a switcher */
   const switcher = isRoom()
         ? buildSwitcher()
         : ((console.log('Not in a room. location:'+document.location.href)), null);
   if (switcher) {
-    if (!target || target.id !== 'thread-switcher') {
+    const target = currentRoom.nextElementSibling;
+    if (!target || target.id != 'thread-switcher') {
       /* switcher doesn't exist yet! add it */
-      reference.parentNode.insertBefore(switcher, reference.nextSibling);
+      currentRoom.parentNode.insertBefore(switcher, target);
     }
-    if (target && target.textContent !== switcher.textContent) {
-      /* we found new threads since the last run, update switcher */
-      reference.parentNode.replaceChild(switcher, target);
+    else if (target && target.textContent != switcher.textContent) {
+      /* update switcher */
+      currentRoom.parentNode.replaceChild(switcher, target);
     }
   }
   else {
-    if (target && target.id === 'thread-switcher') {
-      reference.parentNode.removeChild(target);
+    const switcher = document.getElementById('thread-switcher');
+    if (switcher) {
+      switcher.parentNode.removeChild(switcher);
     }
   }
 };
@@ -151,13 +146,13 @@ const insertSwitcher = () => {
 const injectCSS = () => {
   const cssOverride = document.createElement('style');
   cssOverride.innerHTML = `
-    #thread-switcher {}
-    #thread-selector {
+    #thread-switcher {
       position: absolute;
-      top: 65px;
+      top: 0px;
       right: 0px;
+    }
+    #thread-selector {
       width: 120px;
-      z-index: 2147483647;
     }
     .thread-list-header {}
     .thread-list-item {}
@@ -172,21 +167,26 @@ const run = () => {
   lastLocationHref = document.location.href;
 };
 
-/* initial run */
-injectCSS();
-run();
+const setup = () => {
+  /* initial run */
+  injectCSS();
+  run();
 
-/* call run when the document changes and then settles down */
-let runID;
-const observer = new MutationObserver( () => {
-  if (document.location.href == lastLocationHref) {
-    //return;
-  }
-  if (typeof runID === 'number') {
-    clearTimeout(runID);
-  }
-  runID = setTimeout(run, 200);
-});
-observer.observe(document.body, { childList: true, subtree: true });
+  /* call run when the document changes and then settles down */
+  let runID;
+  const observer = new MutationObserver( () => {
+    if (document.location.href == lastLocationHref) {
+      //return;
+    }
+    if (typeof runID === 'number') {
+      clearTimeout(runID);
+    }
+    runID = setTimeout(run, 200);
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+};
+
+/* wait for the end of the document loading process before running setup */
+window.onload = () => setup();
 
 })();
