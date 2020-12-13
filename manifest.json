@@ -5,7 +5,10 @@
   "description": "Google Chat Extension to add a Thread Switcher",
   "version": "1.0.1",
   "homepage_url": "https://github.com/itagagaki/GoogleChatThreadSwitcher",
-
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
   "content_scripts": [
     {
       "matches": ["https://chat.google.com/*"],
@@ -13,7 +16,6 @@
       "js": ["./thread-switcher.js"]
     }
   ],
-
   "permissions": [
     "activeTab"
   ]
