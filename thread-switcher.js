@@ -131,17 +131,17 @@ const insertSwitcher = () => {
         ? buildSwitcher()
         : ((console.log('Not in a room. location:'+document.location.href)), null);
   if (switcher) {
-    if (target.id !== 'thread-switcher') {
+    if (!target || target.id !== 'thread-switcher') {
       /* switcher doesn't exist yet! add it */
       reference.parentNode.insertBefore(switcher, reference.nextSibling);
     }
-    if (target.textContent !== switcher.textContent) {
+    if (target && target.textContent !== switcher.textContent) {
       /* we found new threads since the last run, update switcher */
       reference.parentNode.replaceChild(switcher, target);
     }
   }
   else {
-    if (target.id === 'thread-switcher') {
+    if (target && target.id === 'thread-switcher') {
       reference.parentNode.removeChild(target);
     }
   }
