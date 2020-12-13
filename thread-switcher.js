@@ -83,7 +83,6 @@ const buildSwitcher = () => {
     .map((thread) => {
       const item = document.createElement('option');
       item.className = 'thread-list-item';
-      item.threadHeading = thread.textContent;
       const titleArr = thread.textContent.split('.');
       if (titleArr[0].indexOf('Unread') >= 0 || titleArr[0].indexOf('未読') >= 0) {
         item.className = item.className + ' thread-unread';
