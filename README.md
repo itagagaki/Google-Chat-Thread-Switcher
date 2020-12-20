@@ -1,22 +1,22 @@
-# GoogleChatThreadSwitcher
+# Google Chat Thread Switcher
 Google Chat Extension to add a Thread Switcher
 
 ## Overview
-GoogleChatThreadSwitcher is a Google Chrome extension.
+Google Chat Thread Switcher is a Google Chrome extension.
 Once installed on Google Chrome, it allows you to select and go threads in Google Chat.
 
 ## Who made it?
 The base code is Jesse Jurman's [beta-chat-thread-picker](https://github.com/JRJurman/beta-chat-thread-picker).
 I forked it and made a major modification to it.
-That is [GoogleChatThreadSwitcher](https://github.com/itagagaki/GoogleChatThreadSwitcher).
+That is [Google-Chat-Thread-Switcher](https://github.com/itagagaki/Google-Chat-Thread-Switcher).
 
 ## How to install it
-1. Download GoogleChatThreadSwitcher.
+1. Download Google Chat Thread Switcher.
 2. Launch Google Chrome.
 3. Open Chrome menu > Tools > Extensions.
 4. Turn on Developer Mode (top right-hand corner).
 5. Click [LOAD UNPACKAGED].
-6. Select the GoogleChatThreadSwitcher folder.
+6. Select the Google Chat Thread Switcher folder.
 
 ## Usage
 When you open Chat again after installation, a drop-down list appears in the upper right-hand corner, select a thread. Then it scrolls into the input field for that thread.
@@ -33,20 +33,20 @@ This extension is made possible by analyzing Google Chat, so if Google Chat chan
 I'll think about it then when it happens...
 
 ## 概要
-GoogleChatThreadSwitcherはGoogle Chrome拡張機能です。
-Google Chromeにインストールすると、Google Chatでスレッドを選んで移動することができるようになります。Google Chatのスタンドアロンアプリでも機能を使うことができます。
+Google Chat Thread Switcher は Google Chrome 拡張機能です。
+Google Chrome にインストールすると、Google Chat でスレッドを選んで移動することができるようになります。Google Chat のスタンドアロンアプリでも機能を使うことができます。
 
 ## 誰が作ったか？
 ベースのコードはJesse Jurman氏の[beta-chat-thread-picker](https://github.com/JRJurman/beta-chat-thread-picker)です。
-これを私がフォークし、大きく改造して作ったのが[GoogleChatThreadSwitcher](https://github.com/itagagaki/GoogleChatThreadSwitcher)です。
+これを私がフォークし、大きく改造して作ったのが[Google-Chat-Thread-Switcher](https://github.com/itagagaki/Google-Chat-Thread-Switcher)です。
 
 ## インストール方法
-1. GoogleChatThreadSwitcherをダウンロードします。
-2. Google Chromeを起動します。
+1. Google Chat Thread Switcher をダウンロードします。
+2. Google Chrome を起動します。
 3. Chrome メニュー → その他のツール → 拡張機能 を開きます。
 4. デベロッパーモードをONにしてください（右上）
 5. ［パッケージ化されていない拡張機能を読み込む］をクリックします。
-6. GoogleChatThreadSwitcherのフォルダを選択します。
+6. Google Chat Thread Switcher のフォルダを選択します。
 
 ## 使用方法
 インストール後あらためてChatを開くと、右上にドロップダウンリストが現れ、スレッドを選ぶと、そのスレッドの入力欄にスクロールします。
@@ -60,5 +60,5 @@ Google Chromeにインストールすると、Google Chatでスレッドを選�
 その他の改良も大歓迎です。
 
 ## ご注意
-この拡張機能はGoogle Chatを解析して実現しているため、Google Chatが変わったら動かなくなる可能性があります。
+この拡張機能は Google Chat を解析して実現しているため、Google Chat が変わったら動かなくなる可能性があります。
 その時はその時ということで…
