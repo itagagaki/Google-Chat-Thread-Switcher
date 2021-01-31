@@ -3,7 +3,7 @@
 
   "name": "Google Chat Thread Switcher",
   "description": "Google Chat Extension to add a Thread Switcher",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "homepage_url": "https://github.com/itagagaki/GoogleChatThreadSwitcher",
   "icons": {
     "48": "icon48.png",
