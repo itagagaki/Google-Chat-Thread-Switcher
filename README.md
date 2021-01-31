@@ -24,7 +24,7 @@ Unread thread titles are shown in bold.
 
 Thread titles are automatically created from the first line of the first post in each thread, so when creating a new thread, it is recommended that the first line be just [title]. (See the source if you want to know the detailed rules).
 
-When you click in a thread, the thread title will appear in the upper left corner of the chat room.
+When you click in a thread, the thread title will be displayed at the top of the chat room for one second.
 
 Unfortunately, threads that are not loaded will not appear in the drop-down list. If you scroll through the chat room and a new thread is loaded, it will be reflected in the drop-down list. This is an unavoidable feature, but if you have solved this issue, please contribute to the GitHub repository.
 
@@ -57,7 +57,7 @@ Google Chrome にインストールすると、Google Chat でスレッドを選
 
 スレッドタイトルは、各スレッドの最初の書き込みの最初の行から自動的に作っていますので、新しいスレッドを作るときは、1行目を【タイトル】だけにするのがおススメです。（詳しいルールを知りたければソースを見てください）。
 
-スレッド内をクリックするとチャットルームの左上にスレッドタイトルが表示されます。
+スレッド内をクリックするとチャットルームの上部にスレッドタイトルが1秒間表示されます。
 
 残念なことに、ロードされていないスレッドはドロップダウンリストには表示されません。チャットルームをスクロールして新たなスレッドがロードされたらドロップダウンリストに反映されます。これは致し方のない仕様ですが、もしこのイシューを解決できたならぜひGitHubのリポジトリにコントリビュートしてください。
 
