@@ -1,9 +1,5 @@
 ( () => {
 
-/* helper methods for checking if current page is a DM or a Room */
-const isDM = () => document.location.pathname.indexOf('/dm/') > -1;
-const isRoom = () => document.location.pathname.indexOf('/room/') > -1;
-
 /* variables */
 let lastLocationHref;
 let currentRoom;
@@ -91,14 +87,13 @@ const switchThread = () => {
 
 /* build the switcher */
 const buildSwitcher = () => {
-  /* query for threads in this room */
-  const roomId = document.location.pathname.replace(/.*\/room\/([^\/]+).*$/, '$1');
-  console.log('location:'+document.location.href+' => roomId:'+roomId);
-  currentRoom = document.querySelector(`[data-group-id="space/${roomId}"][role="main"]`);
+  /* query for room */
+  currentRoom = document.body.querySelector('[role="main"]');
   if (currentRoom === undefined || currentRoom === null) {
     console.log('Room element not found.');
     return null;
   }
+  /* query for threads in the room */
   const threadHeaders = currentRoom.querySelectorAll('[role="heading"][aria-label]');
   threadHeadersArray = Array.from(threadHeaders);
   if (threadHeadersArray.length == 0) {
@@ -153,9 +148,7 @@ const buildSwitcher = () => {
 /* logic for building the switcher and injecting it into the page */
 const insertSwitcher = () => {
   /* if we are not in a room, don't build a switcher */
-  const switcher = isRoom()
-        ? buildSwitcher()
-        : ((console.log('Not in a room. location:'+document.location.href)), null);
+  const switcher = buildSwitcher();
   if (switcher) {
     const target = currentRoom.nextElementSibling;
     if (target && target.id == 'thread-switcher') {
@@ -188,6 +181,7 @@ const injectCSS = () => {
       top: 0px;
       right: 0px;
       width: 120px;
+      z-index: 950;
     }
     #thread-heading {
       position: absolute;
