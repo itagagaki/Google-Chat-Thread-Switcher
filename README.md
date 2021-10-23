@@ -19,12 +19,13 @@ That is [Google-Chat-Thread-Switcher](https://github.com/itagagaki/Google-Chat-T
 6. Select the Google Chat Thread Switcher folder.
 
 ## Usage
-When you open Chat again after installation, a drop-down list appears in the upper right-hand corner, select a thread. Then it scrolls into the input field for that thread.
-Unread thread titles are shown in bold.
+After installing this extension, when you open a space with threads in Chat, a drop-down list will appear in the upper right corner, and when you click on it, you will see a list of loaded thread titles. If you select a thread there, it will scroll to the input field for that thread.
+
+In the drop-down list, the titles of unread threads will be displayed in bold.
 
 Thread titles are automatically created from the first line of the first post in each thread, so when creating a new thread, it is recommended that the first line be just [title]. (See the source if you want to know the detailed rules).
 
-When you click in a thread, the thread title will be displayed at the top of the chat room for one second.
+When you click in a thread, the thread title will be shown at the top of the chat room for one second.
 
 Unfortunately, threads that are not loaded will not appear in the drop-down list. If you scroll through the chat room and a new thread is loaded, it will be reflected in the drop-down list. This is an unavoidable feature, but if you have solved this issue, please contribute to the GitHub repository.
 
@@ -51,9 +52,9 @@ Google Chrome にインストールすると、Google Chat でスレッドを選
 6. Google Chat Thread Switcher のフォルダを選択します。
 
 ## 使用方法
-インストール後あらためてChatを開くと、右上にドロップダウンリストが現れ、スレッドを選ぶと、そのスレッドの入力欄にスクロールします。
+この拡張機能をインストールしてChatでスレッドのあるスペースを開くと、右上にドロップダウンリストが現れ、クリックするとロード済みスレッドのタイトルの一覧が表示されます。そこでスレッドを選ぶと、そのスレッドの入力欄にスクロールします。
 
-未読のあるスレッドのタイトルは太字で表示されます。
+ドロップダウンリストでは、未読スレッドのタイトルは太字で表示されます。
 
 スレッドタイトルは、各スレッドの最初の書き込みの最初の行から自動的に作っていますので、新しいスレッドを作るときは、1行目を【タイトル】だけにするのがおススメです。（詳しいルールを知りたければソースを見てください）。
 
