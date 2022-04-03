@@ -1,9 +1,9 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
 
   "name": "Google Chat Thread Switcher",
   "description": "Google Chat Extension to add a Thread Switcher",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "homepage_url": "https://github.com/itagagaki/GoogleChatThreadSwitcher",
   "icons": {
     "48": "icon48.png",
@@ -19,5 +19,8 @@
   ],
   "permissions": [
     "activeTab"
+  ],
+  "host_permissions": [
+    "https://*.google.com/*"
   ]
 }

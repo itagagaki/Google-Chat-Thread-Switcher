@@ -58,7 +58,13 @@ const switchThread = () => {
   if (select) {
     const index = select.selectedIndex - 1;
     if (index >= 0) {
-      const threadContainer = threadHeadersArray[index].nextElementSibling;
+      let threadContainer = threadHeadersArray[index].nextElementSibling;
+      while (threadContainer) {
+        if (threadContainer.querySelector('[role="button"]')) {
+          break;
+        }
+        threadContainer = threadContainer.nextElementSibling;
+      }
       if (threadContainer) {
         let timerID;
         const watchScroll = () => {
@@ -67,11 +73,11 @@ const switchThread = () => {
           }
           timerID = setTimeout( () => {
             window.removeEventListener('scroll', watchScroll, true);
-            currentRoom.firstChild.scrollTop += 40;
+            currentRoom.firstChild.scrollTop += 40; // TODO: This stopped working after the content was moved to an iframe.
           }, 100);
         };
         window.addEventListener('scroll', watchScroll, true);
-        threadContainer.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'});
+        threadContainer.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'}); // NOTE: Smooth scrolling will not work unless Chrome's own flag is enabled.
         showThreadHeading(threadHeadersArray[index]);
       }
       else {
@@ -214,14 +220,15 @@ const clickEventHandler = e => {
     return;
   }
   while (node) {
-    if (node.previousElementSibling) {
-      const role = node.previousElementSibling.getAttribute('role');
-      const label = node.previousElementSibling.getAttribute('aria-label');
+    while (node.previousElementSibling) {
+      node = node.previousElementSibling;
+      const role = node.getAttribute('role');
+      const label = node.getAttribute('aria-label');
       if (role == 'heading' && typeof label === 'string') {
-        showThreadHeading(node.previousElementSibling);
+        showThreadHeading(node);
         return;
       }
-      if (role == 'button' && node.previousElementSibling.getAttribute('title') !== null) {
+      if (role == 'button' && node.getAttribute('title') !== null) {
         return;
       }
     }
@@ -230,6 +237,10 @@ const clickEventHandler = e => {
 };
 
 const setup = () => {
+  if (document.location.hash.indexOf('id=hostFrame1') == -1) {
+    return;
+  }
+
   /* initial run */
   injectCSS();
   run();
