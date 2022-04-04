@@ -73,7 +73,16 @@ const switchThread = () => {
           }
           timerID = setTimeout( () => {
             window.removeEventListener('scroll', watchScroll, true);
-            currentRoom.firstChild.scrollTop += 40; // TODO: This stopped working after the content was moved to an iframe.
+            let elem = currentRoom.firstChild;
+            while (elem) {
+              if (elem.scrollTop != 0) {
+                break;
+              }
+              elem = elem.nextElementSibling;
+            }
+            if (elem) {
+              elem.scrollTop += 80;
+            }
           }, 100);
         };
         window.addEventListener('scroll', watchScroll, true);
@@ -95,15 +104,15 @@ const switchThread = () => {
 const buildSwitcher = () => {
   /* query for room */
   currentRoom = document.body.querySelector('[role="main"]');
-  if (currentRoom === undefined || currentRoom === null) {
-    console.log('Room element not found.');
+  if (!currentRoom) {
+    //console.log('Room element not found.');
     return null;
   }
   /* query for threads in the room */
   const threadHeaders = currentRoom.querySelectorAll('[role="heading"][aria-label]');
   threadHeadersArray = Array.from(threadHeaders);
   if (threadHeadersArray.length == 0) {
-    console.log('No threads.');
+    //console.log('No threads.');
     return null;
   }
 
@@ -237,7 +246,7 @@ const clickEventHandler = e => {
 };
 
 const setup = () => {
-  if (document.location.hash.indexOf('id=hostFrame1') == -1) {
+  if (!document.location.hash.match(/id=\w*Frame/)) {
     return;
   }
 
