@@ -7,6 +7,7 @@ let threadHeadersArray;
 let showThreadHeadingTimerID;
 
 /* transform text from a thread summary */
+/* TODO: L10N */
 const formatTitleFromThreadHeading = title => {
   return title
   //.replace(/Thread by [^\.]*\./, '') /* remove thread creator */
@@ -39,10 +40,15 @@ const showThreadHeading = thread => {
   const elem = document.getElementById('thread-heading');
   if (elem) {
     const titleArr = thread.textContent.split('.');
-    if (titleArr[0].indexOf('Unread') > -1 || titleArr[0].indexOf('未読') > -1) {
-      titleArr.shift();
+    if (titleArr.length > 0 &&
+        (titleArr[0].indexOf('Unread') > -1 || titleArr[0].indexOf('未読') > -1)) { // TODO: L10N
+      titleArr.shift();         // exclude unread count
     }
-    titleArr.shift();
+    titleArr.shift();           // exclude thread author name
+    if (titleArr.length > 0 &&
+        (titleArr[0].indexOf('Space Manager') > -1 || titleArr[0].indexOf('スペースの管理者') > -1)) { // TODO: L10N
+      titleArr.shift(); // exclude indication of thread author's position in this space
+    }
     elem.textContent = formatTitleFromThreadHeading(titleArr.join('.'));
     elem.style.display = 'block';
     if (typeof showThreadHeadingTimerID === 'number') {
@@ -122,11 +128,16 @@ const buildSwitcher = () => {
       const item = document.createElement('option');
       item.className = 'thread-list-item';
       const titleArr = thread.textContent.split('.');
-      if (titleArr[0].indexOf('Unread') > -1 || titleArr[0].indexOf('未読') > -1) {
+      if (titleArr.length > 0 &&
+          (titleArr[0].indexOf('Unread') > -1 || titleArr[0].indexOf('未読') > -1)) { // TODO: L10N
         item.className = item.className + ' thread-unread';
-        titleArr.shift();
+        titleArr.shift();       // exclude unread count
       }
-      titleArr.shift();
+      titleArr.shift();         // exclude thread author name
+      if (titleArr.length > 0 &&
+          (titleArr[0].indexOf('Space Manager') > -1 || titleArr[0].indexOf('スペースの管理者') > -1)) { // TODO: L10N
+        titleArr.shift();       // exclude indication of thread author's position in this space
+      }
       item.textContent = formatTitleFromThreadHeading(titleArr.join('.'));
       return item;
     });
@@ -141,7 +152,7 @@ const buildSwitcher = () => {
   head.hidden = true;
   head.disabled = true;
   head.className = 'thread-list-header';
-  head.textContent = 'スレッド移動';
+  head.textContent = 'スレッド移動'; // TODO: L10N
   selectDOM.appendChild(head);
   threadList.forEach(option => selectDOM.appendChild(option));
 
