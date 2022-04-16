@@ -152,7 +152,7 @@ const buildSwitcher = () => {
   head.hidden = true;
   head.disabled = true;
   head.className = 'thread-list-header';
-  head.textContent = 'スレッド移動'; // TODO: L10N
+  head.textContent = chrome.i18n.getMessage('goto_thread');
   selectDOM.appendChild(head);
   threadList.forEach(option => selectDOM.appendChild(option));
 
