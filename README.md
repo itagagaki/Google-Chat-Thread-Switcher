@@ -10,7 +10,7 @@ The base code is Jesse Jurman's [beta-chat-thread-picker](https://github.com/JRJ
 I forked it and made a major modification to it.
 That is [Google-Chat-Thread-Switcher](https://github.com/itagagaki/Google-Chat-Thread-Switcher).
 
-## How to install it
+## How to install it manually
 1. Download Google Chat Thread Switcher.
 2. Launch Google Chrome.
 3. Open Chrome menu > More tools > Extensions.
@@ -43,7 +43,7 @@ Google Chrome にインストールすると、Google Chat でスレッドを選
 ベースのコードはJesse Jurman氏の[beta-chat-thread-picker](https://github.com/JRJurman/beta-chat-thread-picker)です。
 これを私がフォークし、大きく改造して作ったのが[Google-Chat-Thread-Switcher](https://github.com/itagagaki/Google-Chat-Thread-Switcher)です。
 
-## インストール方法
+## 手動インストール方法
 1. Google Chat Thread Switcher をダウンロードします。
 2. Google Chrome を起動します。
 3. Chrome メニュー → その他のツール → 拡張機能 を開きます。
