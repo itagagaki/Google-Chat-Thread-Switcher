@@ -18,9 +18,6 @@
       "js": ["./thread-switcher.js"]
     }
   ],
-  "permissions": [
-    "activeTab"
-  ],
   "host_permissions": [
     "https://*.google.com/*"
   ]
