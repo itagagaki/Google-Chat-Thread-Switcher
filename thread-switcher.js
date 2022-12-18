@@ -62,8 +62,9 @@ const showThreadHeading = thread => {
 const switchThread = () => {
   const select = document.getElementById('thread-selector');
   if (select) {
-    const index = select.selectedIndex - 1;
-    if (index >= 0) {
+    let index = select.selectedIndex;
+    if (index >= 2) {
+      index -= 2;
       let threadContainer = threadHeadersArray[index].nextElementSibling;
       while (threadContainer) {
         if (threadContainer.querySelector('[role="button"]')) {
@@ -98,8 +99,13 @@ const switchThread = () => {
       else {
         console.log('thread container element not found.');
       }
-      select.selectedIndex = 0;
+    } else if (index == 1) { // Go to the upper end (to fetch more threads)
+      let topThreadHead = threadHeadersArray[0];
+      if (topThreadHead) {
+        topThreadHead.scrollIntoView({behavior: 'auto', block: 'start', inline: 'nearest'});
+      }
     }
+    select.selectedIndex = 0;
   }
   else {
     console.log('#thread-selector not found.');
@@ -148,12 +154,20 @@ const buildSwitcher = () => {
   selectDOM.id = 'thread-selector';
   selectDOM.onchange = switchThread;
 
-  const head = document.createElement('option');
-  head.hidden = true;
-  head.disabled = true;
-  head.className = 'thread-list-header';
-  head.textContent = chrome.i18n.getMessage('goto_thread');
-  selectDOM.appendChild(head);
+  let item;
+  /* add 'Go to thread' to <select> DOM */
+  item = document.createElement('option');
+  item.hidden = true;
+  item.disabled = true;
+  item.className = 'thread-list-header';
+  item.textContent = chrome.i18n.getMessage('goto_thread');
+  selectDOM.appendChild(item);
+  /* add 'Go to the upper end' to <select> DOM */
+  item = document.createElement('option');
+  item.className = 'thread-list-fetch';
+  item.textContent = chrome.i18n.getMessage('goto_upper_end');
+  selectDOM.appendChild(item);
+  /* add thread titles to <select> DOM */
   threadList.forEach(option => selectDOM.appendChild(option));
 
   selectDOM.selectedIndex = 0;
@@ -216,6 +230,7 @@ const injectCSS = () => {
       background: pink;
     }
     .thread-list-header {}
+    .thread-list-fetch { color: #2d76e5; }
     .thread-list-item {}
     .thread-unread { font-weight: bold; }
   `;

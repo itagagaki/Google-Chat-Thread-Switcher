@@ -1,9 +1,17 @@
 # Google Chat Thread Switcher
-Google Chat Extension to add a Thread Switcher
+Google Chat Extension to add a Thread (Topic) Switcher
 
 ## Overview
 Google Chat Thread Switcher is a Google Chrome extension.
-Once installed on Google Chrome, it allows you to select and go threads in Google Chat.
+Once installed on Google Chrome, it allows you to select and go threads (topics) in Google Chat.
+
+## Detailed explanation
+Some Google Chat "Spaces" (used to be called "Chat Rooms") can have multiple threads, and some cannot. You can choose that when you create the Space.
+This extension adds a drop-down list to a Space with multiple threads, where you can pick a Thread and move it around.
+
+To complicate things, Google has changed the term "Thread" to "Topic." Following suit, I have changed this extension to display "Topic." But I don't want to change the extension name, so it remains "Google Chat Thread Switcher."
+
+Further complicating, Google has implemented an additional "inline thread" feature for spaces that do not have threads (or rather multi-topic). Please do not confuse them.
 
 ## Who made it?
 The base code is Jesse Jurman's [beta-chat-thread-picker](https://github.com/JRJurman/beta-chat-thread-picker).
@@ -27,7 +35,7 @@ Thread titles are automatically created from the first line of the first post in
 
 When you click in a thread, the thread title will be shown at the top of the chat room for one second.
 
-Unfortunately, threads that are not loaded will not appear in the drop-down list. If you scroll through the chat room and a new thread is loaded, it will be reflected in the drop-down list. This is an unavoidable feature, but if you have solved this issue, please contribute to the GitHub repository.
+Unfortunately, threads that are not loaded will not appear in the drop-down list. If you scroll through the chat room and a new thread is loaded, it will be reflected in the drop-down list. For this purpose, I have provided a "Upper end (to fetch more topics)" function at the beginning of the drop-down list. This is an unavoidable feature, but if you have solved this issue, please contribute to the GitHub repository.
 
 Other improvements are also welcome.
 
@@ -37,7 +45,15 @@ I'll think about it then when it happens...
 
 ## 概要
 Google Chat Thread Switcher は Google Chrome 拡張機能です。
-Google Chrome にインストールすると、Google Chat でスレッドを選んで移動することができるようになります。Google Chat のスタンドアロンアプリでも機能を使うことができます。
+Google Chrome にインストールすると、Google Chat でスレッド（トピック）を選んで移動することができるようになります。
+
+## 詳細な説明
+Google チャットの「スペース」（以前は「チャットルーム」と呼ばれていました）には、複数のスレッドを持つことができるものと、そうでないものとがあります。スペース作成時にそれを選択することができます。
+この拡張機能は、複数のスレッドを持つスペースにドロップダウンリストを追加し、そこでスレッドを選んで移動させることができるようにします。
+
+複雑なことに、Googleは「スレッド」という用語を「トピック」に変更しました。それに倣って、この拡張機能でも「トピック」と表示するように変更しました。しかし拡張機能の名前は変えたくないので「Google Chat Thread Switcher」のままです。
+
+さらにややこしいことに、Googleはスレッド（というかマルチトピック）を持たないスペースに「インラインスレッド」という機能を追加実装しています。混同しないようご注意ください。
 
 ## 誰が作ったか？
 ベースのコードはJesse Jurman氏の[beta-chat-thread-picker](https://github.com/JRJurman/beta-chat-thread-picker)です。
@@ -60,7 +76,7 @@ Google Chrome にインストールすると、Google Chat でスレッドを選
 
 スレッド内をクリックするとチャットルームの上部にスレッドタイトルが1秒間表示されます。
 
-残念なことに、ロードされていないスレッドはドロップダウンリストには表示されません。チャットルームをスクロールして新たなスレッドがロードされたらドロップダウンリストに反映されます。これは致し方のない仕様ですが、もしこのイシューを解決できたならぜひGitHubのリポジトリにコントリビュートしてください。
+残念なことに、ロードされていないスレッドはドロップダウンリストには表示されません。チャットルームをスクロールして新たなスレッドがロードされたらドロップダウンリストに反映されます。そのためにドロップダウンリストの最初に「上端へ（もっとトピックを読み込む）」という機能を用意してあります。これは致し方のない仕様ですが、もしこのイシューを解決できたならぜひGitHubのリポジトリにコントリビュートしてください。
 
 その他の改良も大歓迎です。
 

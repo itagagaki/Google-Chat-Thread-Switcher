@@ -1,5 +1,8 @@
 {
   "goto_thread": {
-    "message": "Go to Thread"
+    "message": "Go to Topic"
+  },
+  "goto_upper_end": {
+    "message": "Upper end (to fetch more topics)"
   }
 }

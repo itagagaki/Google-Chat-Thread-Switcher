@@ -1,5 +1,8 @@
 {
   "goto_thread": {
-    "message": "スレッド移動"
+    "message": "トピック移動"
+  },
+  "goto_upper_end": {
+    "message": "上端へ（もっとトピックを読み込む）"
   }
 }
