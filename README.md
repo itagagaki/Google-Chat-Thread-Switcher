@@ -5,6 +5,16 @@ Google Chat Extension to add a Thread (Topic) Switcher
 Google Chat Thread Switcher is a Google Chrome extension.
 Once installed on Google Chrome, it allows you to select and go threads (topics) in Google Chat.
 
+> [!NOTE]
+> Around 2020, Google Chat for organizational accounts included an option called "Use threaded replies", which allowed for multiple thread formats when creating new chat rooms (now called "Spaces").
+> This Chrome extension improves the UX/UI of those multi-threaded chat rooms.
+> 
+> However, the old threaded format no longer exists in the current Google Chat Spaces.
+> Google has been consolidating all chat rooms—both organizational and personal—into the new "inline threading" format to "prevent confusion in conversations."
+> In 2023, Google forced all Spaces to update to the "inline threading format."
+> 
+> Therefore, I believe this extension has now become obsolete.
+
 ## Detailed explanation
 Some Google Chat "Spaces" (used to be called "Chat Rooms") can have multiple threads, and some cannot. You can choose that when you create the Space.
 This extension adds a drop-down list to a Space with multiple threads, where you can pick a Thread and move it around.
@@ -46,6 +56,15 @@ I'll think about it then when it happens...
 ## 概要
 Google Chat Thread Switcher は Google Chrome 拡張機能です。
 Google Chrome にインストールすると、Google Chat でスレッド（トピック）を選んで移動することができるようになります。
+
+> [!NOTE]
+> 2020年頃の組織アカウント向けGoogle Chatには、新しいチャットルーム（現在の「スペース」）を作成する際に、複数のスレッド形式を許可するオプション「スレッド返信を使用する」がありました。
+> 本拡張機能は、その複数のスレッド形式のチャットルームのUX/UIを改善するものです。
+> 
+> しかし、現在のGoogle Chatのスペースには、その旧スレッド形式は存在しません。
+> Googleは「会話の混乱を防ぐ」として、組織用・個人用問わず、新しい「インラインスレッド形式」への統合を進め、2023年にすべてのスペースを「インラインスレッド形式」へ強制的にアップデートしました。
+>
+> したがって、現在では、この拡張機能は、無用の長物となっていると思います。 
 
 ## 詳細な説明
 Google チャットの「スペース」（以前は「チャットルーム」と呼ばれていました）には、複数のスレッドを持つことができるものと、そうでないものとがあります。スペース作成時にそれを選択することができます。
